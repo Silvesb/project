@@ -1,0 +1,4 @@
+.env
+phpmyadmin
+composer.phar
+/vendor/
