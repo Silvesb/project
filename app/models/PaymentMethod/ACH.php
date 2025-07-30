@@ -38,7 +38,7 @@ class ACH extends PaymentMethod {
     }
 
     /**
-     * Get masked account number
+     * @inheritdoc
      */
     public function getMaskedCardNumber(): string
     {

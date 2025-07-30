@@ -13,6 +13,11 @@ class PatientController extends Controller {
         parent::__construct();
     }
 
+    /**
+     * Shows single patient.
+     * @param array $data
+     * @return array $data
+     */
     public function showPatient($data) {
         $patient = new PatientModel();
 
@@ -21,6 +26,9 @@ class PatientController extends Controller {
         return $patient->getPatient($this->pdo, $filteredData);
     }
 
+    /**
+     * @return array|null
+     */
     public function showAllPatients() {
         $patient = new PatientModel();
 
@@ -29,6 +37,7 @@ class PatientController extends Controller {
 
     /**
      * @param array $data
+     * @return bool
      */
     public function createPatient($data) {
         if ($data) {
@@ -69,6 +78,12 @@ class PatientController extends Controller {
         }
     }
 
+    /**
+     * Used while creating patient, removes empty/unused fields.
+     * Makes array readable
+     * @param array $data
+     * @return array
+     */
     function transformInput(array $input): array {
         $personalKeys = ['first_name', 'last_name', 'date_of_birth', 'gender', 'address'];
         $result = [];
@@ -83,7 +98,6 @@ class PatientController extends Controller {
         
         $paymentMethods = [];
         foreach ($filtered as $key => $value) {
-            // Skip personal keys already processed
             if (in_array($key, $personalKeys)) {
                 continue;
             }
@@ -93,7 +107,6 @@ class PatientController extends Controller {
                 $baseKey = $matches[1];
                 $index = (int)$matches[2];
                 
-                // Initialize sub-array if index doesn't exist
                 if (!isset($paymentMethods[$index])) {
                     $paymentMethods[$index] = [];
                 }
@@ -106,7 +119,6 @@ class PatientController extends Controller {
             }
         }
         
-        // Ensure status exists for each payment method (default to false)
         foreach ($paymentMethods as &$method) {
             if (!array_key_exists('status', $method)) {
                 $method['status'] = false;
@@ -120,6 +132,11 @@ class PatientController extends Controller {
         return $result;
     }
 
+    /**
+     * Removes blank fields.
+     * @param array $data
+     * @return array $data
+     */
     function filterOutput($data) {
         $filtered = array_filter($data, function ($element) {
             return is_string($element) && '' !== trim($element);

@@ -19,7 +19,6 @@ function addPaymentMethodFields(formId) {
     const fieldsContainer = document.createElement('div');
     fieldsContainer.className = 'fields-container';
 
-    // Create payment type radios
     const typeWrapper = document.createElement('div');
     const typeLabel = document.createElement('label');
     typeLabel.textContent = 'Payment Type';
@@ -53,7 +52,6 @@ function addPaymentMethodFields(formId) {
         typeInputs.push(radio);
     });
 
-    // Create fields for Credit Card
     const creditCardFields = document.createElement('div');
     creditCardFields.id = `credit-card-fields-${index}`;
     
@@ -65,7 +63,6 @@ function addPaymentMethodFields(formId) {
     creditCardFields.appendChild(expDate.wrapper);
     creditCardFields.appendChild(cardholderName.wrapper);
 
-    // Create fields for ACH
     const achFields = document.createElement('div');
     achFields.id = `ach-fields-${index}`;
     achFields.style.display = 'none';
@@ -86,16 +83,13 @@ function addPaymentMethodFields(formId) {
 
     // Function to toggle required attributes
     const toggleRequired = (activeFields) => {
-        // All possible fields
         const allFields = [
             cardNumber.input, expDate.input, cardholderName.input,
             accountNumber.input, routingNumber.input, accountHolderName.input
         ];
         
-        // Remove required from all
         allFields.forEach(field => field.removeAttribute('required'));
         
-        // Set required for active fields
         activeFields.forEach(field => field.setAttribute('required', 'true'));
     };
 

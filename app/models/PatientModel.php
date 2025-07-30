@@ -125,26 +125,23 @@ class PatientModel {
             return null;  // No search criteria provided
         }
 
-        // Initialize variables for dynamic query building
         $conditions = [];
         $params = [];
         $queryTypes = [];
 
-        // Process ID if provided
         if (!empty($data['id'])) {
             $conditions[] = "patients.id = :id";
             $params[':id'] = $data['id'];
             $queryTypes[] = 'id';
         }
 
-        // Process name if provided
         if (!empty($data['name'])) {
             $conditions[] = "LOWER(CONCAT(patients.first_name, ' ', patients.last_name)) LIKE LOWER(:name)";
             $params[':name'] = '%' . $data['name'] . '%';
             $queryTypes[] = 'name';
         }
 
-        // Handle case where both are provided
+        // Handle case where both fields are provided
         if (count($queryTypes) === 2) {
             $whereClause = implode(' AND ', $conditions);
         }
@@ -158,9 +155,6 @@ class PatientModel {
         }
 
         try {
-            // ... existing query building code ...
-
-            // Build SQL query with JOIN to payment_methods
             $sql = "SELECT 
                         patients.*,
                         payment_methods.id AS payment_method_id,
@@ -271,11 +265,9 @@ class PatientModel {
 
             $insertedPatientId = $pdo->lastInsertId();
 
-            // Clear existing payment methods
             $stmt = $pdo->prepare("DELETE FROM payment_methods WHERE patient_id = ?");
             $stmt->execute([$insertedPatientId]);
 
-            // Save payment methods
             foreach ($this->paymentMethods as $method) {
                 $method->setPatientId($insertedPatientId);
                 
